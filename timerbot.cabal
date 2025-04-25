@@ -1,0 +1,29 @@
+cabal-version:      3.0
+name:               timerbot
+version:            0.1.0.0
+-- synopsis:
+-- description:
+license:            AGPL-3.0-only
+license-file:       LICENSE
+author:             Mistivia
+maintainer:         i@mistivia.com
+-- copyright:
+category:           Network
+build-type:         Simple
+extra-doc-files:    CHANGELOG.md
+-- extra-source-files:
+
+executable timerbot
+    main-is:          Main.hs
+    build-depends:    base
+                    , telegram-bot-simple == 0.14.4
+                    , text                == 2.1.1
+                    , telegram-bot-api    == 7.4.4
+                    , mtl                 == 2.3.1
+                    , time                == 1.12.2
+    hs-source-dirs:   app
+    default-language: GHC2021
+    ghc-options: -Wall -O2 -static -threaded
+    cc-options: -static
+    ld-options: -static -pthread
+    extra-lib-dirs: ./static-libs
