@@ -77,9 +77,9 @@ handleAction action model = case action of
   TextMsg tmsg cid mid -> case (words $ Text.unpack tmsg) of
     (command:args) ->
       case command of
-        _ | command == "/timer" -> handleTimerCmd model cid mid args
-          | otherwise -> replyTextEff model cid mid "无效命令"
-    [] -> replyTextEff model cid mid "无效命令"
+        "/timer" -> handleTimerCmd model cid mid args
+        _ -> return model
+    [] -> return model
   AddEvent e -> return (e:model)
   FireEvents ts -> fireEvents model ts
 
