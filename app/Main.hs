@@ -76,7 +76,7 @@ handleAction :: Action -> Model -> Eff Action Model
 handleAction action model = case action of
   TextMsg tmsg cid mid -> case (words $ Text.unpack tmsg) of
     (command:args) ->
-      case command of
+      case (takeWhile (/='@') command) of
         "/timer" -> handleTimerCmd model cid mid args
         _ -> return model
     [] -> return model
@@ -99,16 +99,25 @@ fireEvents model ts = Eff $ do
 
 handleTimerCmd :: Model -> ChatId -> MessageId -> [String] -> Eff Action Model
 handleTimerCmd model chatId mid args =
-  let minutes :: Maybe Int = readMaybe $ intercalate " " args in
+  let minutes :: Maybe Integer = readMaybe $ intercalate " " args in
     case minutes of
       Nothing -> replyTextEff model chatId mid "格式：/timer <分钟数>" 
       Just num ->
         Eff $ do
-          let acts = do
+          let validNumAction = do
                 replyToMessage chatId mid $ Text.pack $ "已设置" ++ (show num) ++ "分钟提醒"
                 curTime <- liftIO $ currentTimestamp
                 return $ Just $ AddEvent $ Event (curTime + (toInteger num) * 60) chatId mid
-          tell [acts]
+          let invalidNumAction = do
+                replyToMessage chatId mid $ Text.pack $ "只能设置一天内的提醒"
+                return Nothing
+          let queueFullAction = do
+                replyToMessage chatId mid $ Text.pack $ "提醒队列已满"
+                return Nothing
+          if num > 1440 then tell [invalidNumAction]
+          else
+            if (length model) > 4096 then  tell [queueFullAction]
+            else tell [validNumAction]
           return model
 
 run :: Token -> IO ()
