@@ -4,8 +4,6 @@ Telegram timer bot
 
 ## Deploy
 
-用stack构建，然后在项目目录中创建文件`tgtoken`，写入bot的token。
-
 Build with stack, and create a `tgtok` file with a bot token in working direction.
 
 ## Usage
