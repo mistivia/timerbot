@@ -1,17 +1,19 @@
 # Timerbot
 
-Telegram定时提醒机器人。
+Telegram timer bot
 
-## 部署方法
+## Deploy
 
 用stack构建，然后在项目目录中创建文件`tgtoken`，写入bot的token。
 
-## 使用
+Build with stack, and create a `tgtok` file with a bot token in working direction.
 
-命令格式:
+## Usage
 
-    /timer <分钟数>
+The command:
 
-只能设置一天内的提醒。提醒队列长度上限为4096个。
+    /timer <minutes>
 
-提醒不会写入磁盘，程序重启后提醒队列中的内容会丢失。
+The minutes must be within a day. You can set at most 4096 timers.
+
+The timers won't be written to disk. All timers will be lost when bot restarts.
